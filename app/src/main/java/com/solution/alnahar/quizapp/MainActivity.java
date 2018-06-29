@@ -1,12 +1,15 @@
 package com.solution.alnahar.quizapp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -29,10 +32,16 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference users_db_ref;
 
+    public SpotsDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // remove title
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
 
         signIn = findViewById(R.id.btn_signIn);
@@ -44,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 //
-//        final SpotsDialog dialog=new SpotsDialog(SignUpActivity.this);
-//        dialog.setCancelable(false);
+        dialog = new SpotsDialog(MainActivity.this);
+        dialog.setCancelable(false);
 
         database = FirebaseDatabase.getInstance();
         users_db_ref = database.getReference("Users");
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                dialog.show();
 
                 signIn(edtUserName.getText().toString(), edtPassword.getText().toString());
 
@@ -150,14 +161,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                dialog.dismiss();
+
                 if (dataSnapshot.child(userName).exists()) {
 
                     if (!userName.isEmpty()) {
                         UserModel login = dataSnapshot.child(userName).getValue(UserModel.class);
-                        if (login.getPassword().equals(password))
-                            Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
-                        else
+                        if (login.getPassword().equals(password)) {
+
+                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                            finish();
+                        } else {
                             Toast.makeText(MainActivity.this, "wrong password", Toast.LENGTH_SHORT).show();
+                        }
 
 
                     } else {
@@ -173,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+                dialog.dismiss();
             }
         });
     }

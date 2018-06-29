@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
+
 
 
     <android.support.v7.widget.CardView
@@ -13,12 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="2dp"
+        android:backgroundTint="#4f0e0d0e"
+
         app:cardElevation="2dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:orientation="vertical">
 
 
@@ -30,9 +34,9 @@
                 android:text="shahbaz"
 
                 android:inputType="text"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="32sp"
-                app:met_baseColor="@android:color/black"
+                app:met_baseColor="@android:color/white"
                 app:met_floatingLabel="highlight"
                 app:met_maxCharacters="11"
                 app:met_primaryColor="@android:color/white"
@@ -47,9 +51,9 @@
                 android:hint="Password"
                 android:text="12345"
                 android:inputType="textPassword"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="32sp"
-                app:met_baseColor="@android:color/black"
+                app:met_baseColor="@android:color/white"
                 app:met_floatingLabel="highlight"
                 app:met_maxCharacters="11"
                 app:met_primaryColor="@android:color/white"
@@ -81,6 +85,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/black"
+            android:layout_marginRight="10dp"
+
             android:text="Sign In" />
 
 
