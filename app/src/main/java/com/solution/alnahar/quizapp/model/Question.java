@@ -1,20 +1,21 @@
 package com.solution.alnahar.quizapp.model;
 
 public class Question {
-    private  String  Question,AnswerA,AnswerB,AnswerC,AnswerD,CorrectAnswer,categoryId,isImageQuestion;
+    private  String  Question,AnswerA,AnswerB,AnswerC,AnswerD,CorrectAnswer,CategoryId,IsImageQuestion;
 
     public Question() {
     }
 
+
     public Question(String question, String answerA, String answerB, String answerC, String answerD, String correctAnswer, String categoryId, String isImageQuestion) {
-        Question = question;
+        this.Question = question;
         AnswerA = answerA;
         AnswerB = answerB;
         AnswerC = answerC;
         AnswerD = answerD;
         CorrectAnswer = correctAnswer;
-        this.categoryId = categoryId;
-        this.isImageQuestion = isImageQuestion;
+        this.CategoryId = categoryId;
+        this.IsImageQuestion = isImageQuestion;
     }
 
     public String getQuestion() {
@@ -66,18 +67,18 @@ public class Question {
     }
 
     public String getCategoryId() {
-        return categoryId;
+        return CategoryId;
     }
 
     public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+        this.CategoryId = categoryId;
     }
 
     public String getIsImageQuestion() {
-        return isImageQuestion;
+        return IsImageQuestion;
     }
 
     public void setIsImageQuestion(String isImageQuestion) {
-        this.isImageQuestion = isImageQuestion;
+        this.IsImageQuestion = isImageQuestion;
     }
 }

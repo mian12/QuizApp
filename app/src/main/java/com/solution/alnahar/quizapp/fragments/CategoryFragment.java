@@ -21,6 +21,8 @@ import com.google.firebase.database.Query;
 import com.solution.alnahar.quizapp.HomeActivity;
 import com.solution.alnahar.quizapp.Interface.ItemClickListener;
 import com.solution.alnahar.quizapp.R;
+import com.solution.alnahar.quizapp.StartGameActivity;
+import com.solution.alnahar.quizapp.common.Common;
 import com.solution.alnahar.quizapp.model.CategoryModel;
 import com.solution.alnahar.quizapp.viewHolder.CategoryViewHolder;
 import com.squareup.picasso.Picasso;
@@ -98,10 +100,12 @@ public class CategoryFragment extends Fragment {
                     public void onClick(View view, int position, boolean isLongClick) {
 
                         Toast.makeText(getActivity(), "" + object.getName(), Toast.LENGTH_SHORT).show();
-//                        String catId = adapter.getRef(position).getKey();
-//                        Intent intent = new Intent(getContext(), FoodListActivity.class);
-//                        intent.putExtra("categoryId", catId);
-//                        startActivity(intent);
+
+                        Common.categoryId=adapter.getRef(position).getKey();
+
+                        Intent intent=new Intent(getActivity(), StartGameActivity.class);
+
+                        startActivity(intent);
 
                     }
                 });

@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.solution.alnahar.quizapp.common.Common;
 import com.solution.alnahar.quizapp.model.UserModel;
 
 import dmax.dialog.SpotsDialog;
@@ -169,8 +170,12 @@ public class MainActivity extends AppCompatActivity {
                         UserModel login = dataSnapshot.child(userName).getValue(UserModel.class);
                         if (login.getPassword().equals(password)) {
 
+                            Common.currentUser=login;
+
                             startActivity(new Intent(MainActivity.this, HomeActivity.class));
                             finish();
+
+
                         } else {
                             Toast.makeText(MainActivity.this, "wrong password", Toast.LENGTH_SHORT).show();
                         }

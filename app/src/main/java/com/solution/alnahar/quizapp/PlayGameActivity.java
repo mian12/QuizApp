@@ -18,16 +18,13 @@ import com.squareup.picasso.Picasso;
 public class PlayGameActivity extends AppCompatActivity implements View.OnClickListener {
 
     final static long INTERVAL = 1000;
-    final static long TIMEOUT = 7000;
+    final static long TIMEOUT = 6000;
 
     int progressValue = 0;
 
     CountDownTimer mCountDownTimer;
     int index = 0, score = 0, thisQuestion = 0, totalQuestion, correctAnswer = 0;
 
-    // firebase
-    FirebaseDatabase database;
-    DatabaseReference question_db_ref;
 
     ProgressBar progressBar;
     ImageView question_imageView;
@@ -40,13 +37,14 @@ public class PlayGameActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
 
-        database = FirebaseDatabase.getInstance();
-        question_db_ref = database.getReference("Questions");
+
+        question_imageView = findViewById(R.id.question_image);
+        question_text = findViewById(R.id.question_text);
 
 
         txtScore = findViewById(R.id.txtScore);
         txtQuestionNum = findViewById(R.id.totalQuestion);
-        question_text = findViewById(R.id.question_text);
+
 
         progressBar = findViewById(R.id.progressbar);
 
@@ -60,97 +58,12 @@ public class PlayGameActivity extends AppCompatActivity implements View.OnClickL
         btnC.setOnClickListener(this);
         btnD.setOnClickListener(this);
 
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        mCountDownTimer.cancel();
-        if (index < totalQuestion)  // still have question in list
-        {
-
-            Button clickedButton = (Button) v;
-            if (clickedButton.getText().equals(Common.questionList.get(index).getCorrectAnswer())) {
-                // choose correct answer
-                score += 10;
-                correctAnswer++;
-                showQuestion(++index); // next question
-            } else {
-
-                // choose wrong answer
-                Intent intent = new Intent(PlayGameActivity.this, DoneActivity.class);
-                Bundle dataBundle = new Bundle();
-                dataBundle.putInt("SCORE", score);
-                dataBundle.putInt("TOTAL", totalQuestion);
-                dataBundle.putInt("CORRECT", correctAnswer);
-
-                intent.putExtras(dataBundle);
-                startActivity(intent);
-                finish();
-
-            }
-
-            txtScore.setText(score);
-        }
+        totalQuestion = Common.questionList.size();
 
 
-    }
-
-    private void showQuestion(int index) {
-
-        if (index < totalQuestion) {
-            thisQuestion++;
-            txtQuestionNum.setText(String.format("%d", "%d", thisQuestion, totalQuestion));
-            progressBar.setProgress(0);
-            progressValue = 0;
-            if (Common.questionList.get(index).getIsImageQuestion().equals("true")) {
-                Picasso.with(this)
-                        .load(Common.questionList.get(index).getQuestion())
-                        .into(question_imageView);
-
-                question_imageView.setVisibility(View.VISIBLE);
-                question_text.setVisibility(View.INVISIBLE);
-            }
-            else
-            {
-                question_text.setText(Common.questionList.get(index).getQuestion());
-
-                question_imageView.setVisibility(View.VISIBLE);
-                question_text.setVisibility(View.INVISIBLE);
-            }
-
-            btnA.setText(Common.questionList.get(index).getAnswerA());
-            btnB.setText(Common.questionList.get(index).getAnswerB());
-            btnC.setText(Common.questionList.get(index).getAnswerC());
-            btnD.setText(Common.questionList.get(index).getAnswerD());
-
-            mCountDownTimer.start();
-        }
-      else
-          {
-                // if it is final question
-
-                Intent intent = new Intent(PlayGameActivity.this, DoneActivity.class);
-                Bundle dataBundle = new Bundle();
-                dataBundle.putInt("SCORE", score);
-                dataBundle.putInt("TOTAL", totalQuestion);
-                dataBundle.putInt("CORRECT", correctAnswer);
-
-                intent.putExtras(dataBundle);
-                startActivity(intent);
-                finish();
 
 
-        }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        totalQuestion=Common.questionList.size();
-        mCountDownTimer=new CountDownTimer(TIMEOUT,INTERVAL) {
+        mCountDownTimer = new CountDownTimer(TIMEOUT, INTERVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -163,10 +76,112 @@ public class PlayGameActivity extends AppCompatActivity implements View.OnClickL
             public void onFinish() {
 
                 mCountDownTimer.cancel();
+
                 showQuestion(++index);
             }
         };
 
-        showQuestion(++index);
+
+
+        showQuestion(index);
+
     }
+
+    @Override
+    public void onClick(View v) {
+
+
+        mCountDownTimer.cancel();
+
+        Button buttonName=(Button)v;
+
+        String Correct_Answer = Common.questionList.get(index).getCorrectAnswer();
+
+        if (buttonName.getText().toString().equalsIgnoreCase(Correct_Answer)) {
+            // choose correct answer
+            score += 10;
+            correctAnswer++;
+            showQuestion(++index); // next question
+        } else {
+            // choose wrong answer
+            finalResultsActivity();
+
+        }
+
+        txtScore.setText(score + "");
+
+
+
+
+
+    }
+
+
+
+    private void showQuestion(int index) {
+
+        if (index < totalQuestion) {
+            thisQuestion++;
+            txtQuestionNum.setText(String.format("%d / %d", thisQuestion, totalQuestion));
+
+            progressBar.setProgress(0);
+            progressValue = 0;
+
+            if (Common.questionList.get(index).getIsImageQuestion().equals("true")) {
+
+                String url = Common.questionList.get(index).getQuestion();
+
+                Picasso.with(this)
+                        .load(url)
+                        .into(question_imageView);
+
+                question_imageView.setVisibility(View.VISIBLE);
+                question_text.setVisibility(View.INVISIBLE);
+            } else {
+                question_text.setText(Common.questionList.get(index).getQuestion());
+
+                question_imageView.setVisibility(View.INVISIBLE);
+                question_text.setVisibility(View.VISIBLE);
+            }
+
+
+            String btnA_value = Common.questionList.get(index).getAnswerA();
+            String btnB_value = Common.questionList.get(index).getAnswerB();
+            String btnC_value = Common.questionList.get(index).getAnswerC();
+            String btnD_value = Common.questionList.get(index).getAnswerD();
+
+            btnA.setText(btnA_value);
+            btnB.setText(btnB_value);
+            btnC.setText(btnC_value);
+            btnD.setText(btnD_value);
+
+            mCountDownTimer.start();
+
+        } else {
+            // if it is final question
+
+            finalResultsActivity();
+
+
+        }
+    }
+
+    public void finalResultsActivity() {
+
+
+        Intent intent = new Intent(PlayGameActivity.this, DoneActivity.class);
+        Bundle dataBundle = new Bundle();
+        dataBundle.putInt("SCORE", score);
+        dataBundle.putInt("TOTAL", totalQuestion);
+        dataBundle.putInt("CORRECT", correctAnswer);
+
+        intent.putExtras(dataBundle);
+
+        startActivity(intent);
+        finish();
+
+
+    }
+
+
 }
