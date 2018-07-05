@@ -64,13 +64,17 @@ public class DoneActivity extends AppCompatActivity {
             // upload  to db
 
             QuestionScore object=new QuestionScore();
+
+            object.setQuestion_score(String.format("%s_%s",Common.currentUser.getUserName(),Common.categoryId));
+
             object.setUser(Common.currentUser.getUserName());
-            object.setScore(String.format("%s_%s",Common.currentUser.getUserName(),Common.categoryId));
-           object.setQuestion_score(score+"");
+
+            object.setScore(String.valueOf(score));
 
 
 
-            questionScore_db_ref.child(String.format("%s_%s", Common.currentUser.getUserName(),Common.categoryId)).setValue(object);
+            questionScore_db_ref.child(String.format("%s_%s", Common.currentUser.getUserName(),Common.categoryId))
+                    .setValue(object);
 
 
 
