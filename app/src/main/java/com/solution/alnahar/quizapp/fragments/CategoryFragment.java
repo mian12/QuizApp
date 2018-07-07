@@ -81,7 +81,7 @@ public class CategoryFragment extends Fragment {
 
         adapter = new FirebaseRecyclerAdapter<CategoryModel, CategoryViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull CategoryModel model) {
+            protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull final CategoryModel model) {
 
 
                 holder.category_TextView.setText(model.getName());
@@ -102,6 +102,7 @@ public class CategoryFragment extends Fragment {
                         Toast.makeText(getActivity(), "" + object.getName(), Toast.LENGTH_SHORT).show();
 
                         Common.categoryId=adapter.getRef(position).getKey();
+                        Common.categoryName=model.getName();
 
                         Intent intent=new Intent(getActivity(), StartGameActivity.class);
 

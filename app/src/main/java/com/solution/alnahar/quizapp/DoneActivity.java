@@ -68,8 +68,9 @@ public class DoneActivity extends AppCompatActivity {
             object.setQuestion_score(String.format("%s_%s",Common.currentUser.getUserName(),Common.categoryId));
 
             object.setUser(Common.currentUser.getUserName());
-
             object.setScore(String.valueOf(score));
+            object.setCategoryId(Common.categoryId);
+            object.setCategoryName(Common.categoryName);
 
 
 

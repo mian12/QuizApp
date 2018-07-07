@@ -1,6 +1,7 @@
 package com.solution.alnahar.quizapp.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.solution.alnahar.quizapp.Interface.ItemClickListener;
 import com.solution.alnahar.quizapp.Interface.RankingCallBack;
 import com.solution.alnahar.quizapp.R;
+import com.solution.alnahar.quizapp.ScoreDetailActivity;
 import com.solution.alnahar.quizapp.common.Common;
 import com.solution.alnahar.quizapp.model.QuestionScore;
 import com.solution.alnahar.quizapp.model.Ranking;
@@ -68,7 +70,7 @@ public class RankingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ranking, container, false);
@@ -111,7 +113,7 @@ public class RankingFragment extends Fragment {
 
         adapter=new FirebaseRecyclerAdapter<Ranking, RankingViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull RankingViewHolder holder, int position, @NonNull Ranking model) {
+            protected void onBindViewHolder(@NonNull RankingViewHolder holder, int position, @NonNull final Ranking model) {
 
                 holder.txt_name.setText(model.getUserName());
                 holder.txt_score.setText(model.getScore()+"");
@@ -119,6 +121,9 @@ public class RankingFragment extends Fragment {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
 
+                        Intent intent=new Intent(getActivity(), ScoreDetailActivity.class);
+                        intent.putExtra("viewHolder",model.getUserName());
+                        startActivity(intent);
                     }
                 });
 
@@ -158,24 +163,6 @@ public class RankingFragment extends Fragment {
     }
 
 
-    private void showRanking() {
-        ranking_db_ref.orderByChild("score").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data:dataSnapshot.getChildren())
-                {
-                    Ranking local=data.getValue(Ranking.class);
-                    Log.e("d",local.getUserName());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     private void updateScore(final String userName, final RankingCallBack<Ranking> callBack) {
 

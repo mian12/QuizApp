@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Common {
-    public  static  String categoryId;
+    public  static  String categoryId,categoryName;
     public  static UserModel currentUser;
     public  static List<Question> questionList=new ArrayList<>();
 
