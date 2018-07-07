@@ -11,4 +11,6 @@ public class Common {
     public  static UserModel currentUser;
     public  static List<Question> questionList=new ArrayList<>();
 
+    public  static String PUSH_NOTIFICATION="pushNotification";
+
 }

@@ -21,6 +21,27 @@
         <activity android:name=".PlayGameActivity" />
         <activity android:name=".DoneActivity" />
         <activity android:name=".ScoreDetailActivity"></activity>
+
+        <receiver android:name=".broadCastReceiver.AlarmReceiver"></receiver>
+        
+        
+        <service android:name=".pushNotification.MyFirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google..firebase.INSTANCE_ID_EVENT"></action>
+            </intent-filter>
+        </service>
+
+
+
+        <service android:name=".pushNotification.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google..firebase.MESSAGING_EVENT"></action>
+            </intent-filter>
+        </service>
+
+
+
+
     </application>
 
 </manifest>

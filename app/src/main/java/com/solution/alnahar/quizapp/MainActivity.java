@@ -1,5 +1,7 @@
 package com.solution.alnahar.quizapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -21,8 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.solution.alnahar.quizapp.broadCastReceiver.AlarmReceiver;
 import com.solution.alnahar.quizapp.common.Common;
 import com.solution.alnahar.quizapp.model.UserModel;
+
+import java.util.Calendar;
 
 import dmax.dialog.SpotsDialog;
 
@@ -38,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+         registerAlaram();
+
         // remove title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -78,6 +86,25 @@ public class MainActivity extends AppCompatActivity {
                 showSignUpAlertDialog();
             }
         });
+
+
+    }
+
+    private void registerAlaram() {
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,10);
+        calendar.set(Calendar.MINUTE,45);
+        calendar.set(Calendar.SECOND,0);
+
+
+        Intent intent=new Intent(MainActivity.this, AlarmReceiver.class);
+
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(MainActivity.this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager= (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+
+
 
 
     }
